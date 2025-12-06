@@ -1,0 +1,38 @@
+{
+  "level1": {
+    "level": "Affichage",
+    "description": "Écris un code qui affiche 'Bonjour et ton nom' .  Robin ;) ",
+    "starterCode": "variable mon_nom est \"Robin\";\naffiche \"Bonjour \" + mon_nom;",
+    "expectedOutput": "Bonjour Robin"
+  },
+  "level2": {
+    "level": "Si, alors, sinon",
+    "description": "La condition vérifie si l'utilisateur est majeur (age > 17).\n\nSelon le résultat de cette condition :\n\nVrai → affiche \"Vous êtes majeur !\"\n\nFaux → affiche \"Vous êtes mineur !\"\n Affichez le cas ou la personne est majeur.",
+    "starterCode": "variable age est 18;\n\nsi (age plus_grand_que 17) debut\n    affiche \"Vous êtes majeur !\";\nfin sinon debut\n    affiche \"Vous êtes mineur !\";\nfin",
+    "expectedOutput": "Vous êtes majeur !"
+  },
+  "level3": {
+    "level": "Variable/Assignation",
+    "description": "Déclare une variable 'score' avec la valeur 10, puis modifie sa valeur à 20 et affiche le résultat.",
+    "starterCode": "variable score est 10;\nscore est 20;\naffiche score;",
+    "expectedOutput": "20.0"
+  },
+  "level4": {
+    "level": "Tant_que",
+    "description": "Crée une boucle qui affiche les nombres de 1 à 5.\n\nUtilise une variable 'compteur' qui commence à 1.\n\nLa boucle continue tant que compteur est plus_petit_que ou egale à 5.",
+    "starterCode": "variable compteur est 1;\n\ntant_que (compteur plus_petit_que 6) debut\n    affiche compteur;\n    compteur est compteur + 1;\nfin",
+    "expectedOutput": "1.0\n2.0\n3.0\n4.0\n5.0"
+  },
+  "level5": {
+    "level": "Fonction",
+    "description": "Crée une fonction 'multiplier' qui prend deux paramètres (a et b) et retourne leur produit.\n\nAppelle ensuite cette fonction avec les valeurs 4 et 5, et affiche le résultat.",
+    "starterCode": "fonction multiplier (a et b) debut\n variable resultat est a * b;\n retourne resultat;\nfin\n\nvariable mon_resultat est multiplier(4 et 5);\naffiche mon_resultat;",
+    "expectedOutput": "20.0"
+  },
+  "level6": {
+    "level": "Pattern matching",
+    "description": "Utilise 'correspond_a' pour reconnaître un fruit à partir d'un mot. Teste la valeur \"pomme\" et définis plusieurs cas :\n- si la valeur est \"banane\" → retourne \"fruit jaune\"\n- si la valeur est \"pomme\" → retourne \"fruit rouge\"\n- sinon → retourne \"fruit inconnu\"\n\nAffiche ensuite le résultat obtenu.",
+    "starterCode": "variable fruit est correspond_a \"pomme\"\ndebut\n  \"banane\" -> \"fruit jaune\",\n  \"pomme\" -> \"fruit rouge\",\n  par_defaut -> \"fruit inconnu\",\nfin;\naffiche fruit;",
+    "expectedOutput": "fruit rouge"
+  }
+}

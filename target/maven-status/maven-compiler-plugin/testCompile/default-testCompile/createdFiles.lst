@@ -1,0 +1,11 @@
+org/example/InterpreterTest.class
+org/example/AntlrTest.class
+org/example/LexerTest.class
+org/example/vm/LisaCompilerTest.class
+org/example/ImportSystemTest.class
+org/example/ParserTest.class
+org/example/ParserStatementsServiceTest.class
+org/example/EnvironmentTest.class
+org/example/FunctionTest.class
+org/example/vm/VMTest.class
+org/example/vm/BytecodeSerializerTest.class

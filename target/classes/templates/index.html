@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lisa language</title>
+    <style>
+        /* General Body Styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        select, textarea, button {
+            display: block;
+            width: 100%;
+            padding: 12px 15px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        select:focus, textarea:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+
+        textarea {
+            min-height: 200px;
+            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+            resize: vertical;
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            line-height: 1.5;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .description-box, #result {
+            background-color: #ecf0f1;
+            padding: 20px;
+            margin-top: 25px;
+            border-radius: 6px;
+            border: 1px solid #cceeff;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        #result {
+            background-color: #fdfdfd;
+            border: 1px solid #bbddee;
+            min-height: 120px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+            color: #333;
+        }
+
+        .description-box p {
+            margin: 0;
+            color: #555;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        .checkbox-container {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-container label {
+            margin: 0;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        #solutionArea {
+            display: none;
+            margin-bottom: 15px;
+            background-color: #a7d6a8;
+            border: 2px solid #2d703f;
+            color: #000000;
+        }
+
+        /* Validation status */
+        .validation {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .validation.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .validation.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>Lisa Language</h1>
+
+    <form th:action="@{/select}" method="post">
+        <label for="level">Sélectionner un niveau :</label>
+        <select name="level" onchange="this.form.submit()" id="level">
+            <option th:each="ex : ${exercises}"
+                    th:value="${ex.key}"
+                    th:text="${ex.value.level}"
+                    th:selected="${ex.key == selectedExerciseKey}">
+            </option>
+        </select>
+    </form>
+
+    <div class="description-box">
+        <p th:text="${selectedExercise.description}"></p>
+    </div>
+
+    <div class="checkbox-container">
+        <input type="checkbox" id="showSolution" onchange="toggleSolution()">
+        <label for="showSolution">Voir la solution</label>
+    </div>
+
+    <textarea id="solutionArea" readonly th:text="${selectedExercise.starterCode}"></textarea>
+    <textarea id="codeArea" placeholder="Écris ton code ici..."></textarea>
+    <button onclick="runCode()">Exécuter</button>
+
+    <div id="result">...</div>
+    <div id="validation"></div>
+
+</div>
+
+<script th:inline="javascript">
+    const expectedOutput = /*[[${selectedExercise.expectedOutput}]]*/ '';
+
+    function toggleSolution() {
+        const checkbox = document.getElementById('showSolution');
+        const solutionArea = document.getElementById('solutionArea');
+
+        if (checkbox.checked) {
+            solutionArea.style.display = 'block';
+        } else {
+            solutionArea.style.display = 'none';
+        }
+    }
+
+    function runCode() {
+        const code = document.getElementById('codeArea').value;
+
+        fetch('/run', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: new URLSearchParams({code: code})
+        })
+            .then(response => response.text())
+            .then(data => {
+                const clean = data.replace(/\u001b\[[0-9;]*m/g, '');
+                document.getElementById('result').textContent = clean;
+                checkResult(clean.trim());
+            })
+            .catch(err => {
+                const msg = String(err).replace(/\u001b\[[0-9;]*m/g, '');
+                document.getElementById('result').textContent = "Erreur: " + msg;
+            });
+    }
+
+    function checkResult(output) {
+        const validationDiv = document.getElementById('validation');
+
+        if (output === expectedOutput) {
+            validationDiv.className = 'validation success';
+            validationDiv.textContent = '✓ Bravo ! Résultat correct !';
+        } else {
+            validationDiv.className = 'validation error';
+            validationDiv.textContent = '✗ Résultat incorrect. Essaie encore !';
+        }
+    }
+</script>
+</body>
+</html>
